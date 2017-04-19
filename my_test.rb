@@ -1,7 +1,10 @@
 require_relative 'game'
 require 'minitest/autorun'
+require 'codacy-coverage'
+
 # require 'test/unit'
 
+Codacy::Reporter.start
 
 class MyTest < Minitest::Test
 
@@ -24,6 +27,6 @@ class MyTest < Minitest::Test
 
     game = Minesweeper.new(width, height, mines_number)
     puts game
-    assert_equal(game.to_s, "Minefield game: size=10x20, number of mines=50")
+    assert_equal("Minefield game: size=10x20, number of mines=50", game.to_s)
   end
 end
