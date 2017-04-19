@@ -8,4 +8,13 @@ class Minesweeper
   def to_s
     "Minefield game: size=#{@width}x#{@height}, number of mines=#{@mines_number}"
   end
+
+  def play
+    true
+  end
+
+  def still_playing?
+    true
+  end
+
 end

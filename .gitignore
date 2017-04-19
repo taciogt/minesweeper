@@ -51,3 +51,6 @@ build-iPhoneSimulator/
 
 # RubyMine IDE
 .idea
+
+vendor/
+bin/
