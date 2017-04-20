@@ -4,6 +4,7 @@ class PublicCell
   end
 end
 
+
 class PrivateCell
 
   def initialize(x, y)
@@ -51,6 +52,10 @@ class Minesweeper
         @lines[column][line].public_cell
       end
     end
+  end
+
+  def random_number
+    rand(1...1000)
   end
 
 end

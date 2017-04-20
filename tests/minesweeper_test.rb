@@ -32,11 +32,13 @@ class MinesweeperTest < Minitest::Test
 
   end
 
-  def test_first_play_is_valid_for_valid_cells
-    width, height, mines_number = 10, 20, 50
+  def test_stub_works
+    game = Minesweeper.new(2, 2, 0)
 
-    game = Minesweeper.new(width, height, mines_number)
-    assert(game.play)
+    game.stub(:random_number, 42.42) do
+      assert_equal(42.42, game.random_number)
+    end
+
   end
 
 end
