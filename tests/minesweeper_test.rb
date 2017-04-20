@@ -23,11 +23,17 @@ class MinesweeperTest < Minitest::Test
 
   # Fake test
   def test_constructor
-    width, height, mines_number = 10, 20, 50
+    game = Minesweeper.new(2, 4, 1)
 
-    game = Minesweeper.new(width, height, mines_number)
-    assert_equal("Minefield game: size=10x20, number of mines=50", game.to_s)
+    assert_equal("Minefield game: size=2x4, number of mines=1", game.to_s)
     assert(game.still_playing?)
+
+    game.board_state.each do |column|
+      column.each do |public_cell|
+        assert(!public_cell.discovered?)
+      end
+    end
+
   end
 
   def test_first_play_is_valid_for_valid_cells
