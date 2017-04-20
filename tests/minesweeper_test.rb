@@ -32,6 +32,25 @@ class MinesweeperTest < Minitest::Test
 
   end
 
+  def test_play_on_undiscovered_and_unmined_cell
+    game = Minesweeper.new(2, 2, 0)
+
+    assert game.play(0, 0)
+    assert game.still_playing?
+
+    assert game.board_state[0][0].discovered?
+
+  end
+
+  def test_step_over_mine
+    game = Minesweeper.new(1, 1, 1)
+
+    game.stub(:random_number, 42.42) do
+      assert_equal(42.42, game.random_number)
+    end
+
+  end
+
   def test_stub_works
     game = Minesweeper.new(2, 2, 0)
 

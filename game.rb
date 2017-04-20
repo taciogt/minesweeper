@@ -37,7 +37,7 @@ class Minesweeper
     "Minefield game: size=#{@width}x#{@height}, number of mines=#{@mines_number}"
   end
 
-  def play
+  def play(x,y)
     true
   end
 
