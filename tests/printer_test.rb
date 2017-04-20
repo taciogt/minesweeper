@@ -1,10 +1,6 @@
 require_relative '../game'
 require 'minitest/autorun'
-require 'codacy-coverage'
 
-# require 'test/unit'
-
-Codacy::Reporter.start
 
 class PrinterTest < Minitest::Test
 
