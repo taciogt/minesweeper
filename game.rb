@@ -157,13 +157,13 @@ class Minesweeper
   end
 
   private
-
   def surrounding_cells(cell)
     cells = []
 
     Array((cell.position.x - 1)..(cell.position.x + 1)).each do |x|
       Array((cell.position.y - 1)..(cell.position.y + 1)).each do |y|
-        if x >= 0 && x < @width && y >= 0 && y < @height && (x != cell.position.x || y != cell.position.y)
+        if x >= 0 && x < @width && y >= 0 && y < @height &&
+           (x != cell.position.x || y != cell.position.y)
           cells.push @cells[x][y]
         end
       end

@@ -29,6 +29,16 @@ class MinesweeperTest < Minitest::Test
 
   end
 
+  def test_private_methods_are_private
+    assert_raises NoMethodError do
+      @clear_game.surrounding_cells(PrivateCell.new(0, 0))
+    end
+
+    assert_raises NoMethodError do
+      @clear_game.surrounding_mines(PrivateCell.new(0, 0))
+    end
+  end
+
   def test_play
     assert @clear_game.play(0, 0)
     assert @clear_game.still_playing?
