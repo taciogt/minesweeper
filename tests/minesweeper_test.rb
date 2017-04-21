@@ -57,6 +57,11 @@ class MinesweeperTest < Minitest::Test
     assert board_state[0][1].discovered?
     assert !board_state[1][0].discovered?
     assert !board_state[1][0].discovered?
+
+    assert_equal 0, board_state[0][0].surrounding_mines
+    assert_equal 1, board_state[0][1].surrounding_mines
+    assert_equal 0, board_state[1][0].surrounding_mines
+    assert_equal 0, board_state[1][0].surrounding_mines
   end
 
   def test_flag

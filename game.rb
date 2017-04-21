@@ -1,10 +1,30 @@
+class Position
+  def initialize(x, y)
+    @x = x
+    @y = y
+  end
+
+  def x
+    @x
+  end
+
+  def y
+    @y
+  end
+end
+
 class PublicCell
-  def initialize(discovered)
+  def initialize(discovered, surrounding_mines)
     @discovered = discovered
+    @surrounding_mines = surrounding_mines
   end
 
   def discovered?
     @discovered
+  end
+
+  def surrounding_mines
+    @surrounding_mines
   end
 end
 
@@ -12,14 +32,26 @@ end
 class PrivateCell
 
   def initialize(x, y)
-    @x = x
-    @y = y
+    @position = Position.new(x, y)
+
     @discovered = false
     @has_mine = false
   end
 
-  def public_cell
-    PublicCell.new(@discovered)
+  def public_cell(surrounding_cells)
+    surrounding_mines = 0
+    if @discovered
+      surrounding_cells.each do |cell|
+        if cell.has_mine?
+          surrounding_mines += 1
+        end
+      end
+    end
+    PublicCell.new(@discovered, surrounding_mines)
+  end
+
+  def position
+    @position
   end
 
   def hit
@@ -41,7 +73,7 @@ class PrivateCell
   end
 
   def to_s
-    "Private cell (#{@x}, #{@y})"
+    "Private cell (#{@position.x}, #{@position.y})"
   end
 
   def discovered?
@@ -116,13 +148,26 @@ class Minesweeper
   def board_state
     Array.new(@width) do |x|
       Array.new(@height) do |y|
-        @cells[x][y].public_cell
+        @cells[x][y].public_cell surrounding_cells @cells[x][y]
       end
     end
   end
 
-end
+  private
 
+  def surrounding_cells(cell)
+    surrounding_cells = []
+    Array(0...@width).each do |x|
+      Array(0...@height).each do |y|
+        if (@cells[x][y].position.x - cell.position.x).abs == 1 ||
+           (@cells[x][y].position.y - cell.position.y).abs == 1
+          surrounding_cells.push @cells[x][y]
+        end
+      end
+    end
+    surrounding_cells
+  end
+end
 
 class Printer
 
