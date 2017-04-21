@@ -39,15 +39,8 @@ class PrivateCell
     @flag = false
   end
 
-  def public_cell(surrounding_cells)
-    surrounding_mines = 0
-    if @discovered
-      surrounding_cells.each do |cell|
-        if cell.has_mine?
-          surrounding_mines += 1
-        end
-      end
-    end
+  def public_cell(surrounding_mines)
+    surrounding_mines = 0 unless @discovered
     PublicCell.new(@discovered, surrounding_mines)
   end
 
@@ -127,7 +120,16 @@ class Minesweeper
   end
 
   def play(x, y)
-    @cells[x][y].hit
+    is_valid = @cells[x][y].hit
+
+    surrounding_cells(@cells[x][y]).each do |cell|
+      if !cell.discovered? && !cell.has_mine? && surrounding_mines(cell).zero?
+        play(cell.position.x, cell.position.y)
+      end
+    end
+
+    is_valid
+
   end
 
   def flag(x, y)
@@ -149,7 +151,7 @@ class Minesweeper
   def board_state
     Array.new(@width) do |x|
       Array.new(@height) do |y|
-        @cells[x][y].public_cell surrounding_cells @cells[x][y]
+        @cells[x][y].public_cell(surrounding_mines(@cells[x][y]))
       end
     end
   end
@@ -157,16 +159,28 @@ class Minesweeper
   private
 
   def surrounding_cells(cell)
-    surrounding_cells = []
-    Array(0...@width).each do |x|
-      Array(0...@height).each do |y|
-        if (@cells[x][y].position.x - cell.position.x).abs == 1 ||
-           (@cells[x][y].position.y - cell.position.y).abs == 1
-          surrounding_cells.push @cells[x][y]
+    cells = []
+
+    Array((cell.position.x - 1)..(cell.position.x + 1)).each do |x|
+      Array((cell.position.y - 1)..(cell.position.y + 1)).each do |y|
+        if x >= 0 && x < @width && y >= 0 && y < @height && (x != cell.position.x || y != cell.position.y)
+          cells.push @cells[x][y]
         end
       end
     end
-    surrounding_cells
+
+    cells
+  end
+
+  private
+  def surrounding_mines(cell)
+    surrounding_mines = 0
+
+    surrounding_cells(cell).each do |neighbour_cell|
+      surrounding_mines += 1 if neighbour_cell.has_mine?
+    end
+
+    surrounding_mines
   end
 end
 

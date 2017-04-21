@@ -36,13 +36,19 @@ class MinesweeperTest < Minitest::Test
 
     # play on cell already discovered is not valid
     assert !@clear_game.play(0, 0)
-
-    # play on cell with a flag is not valid
-    assert @clear_game.flag(1, 0)
-    assert !@clear_game.play(1, 0)
   end
 
-  def test_play_hit_cell_discovers_more
+  def test_play_on_flag
+    # play on cell with a flag is not valid
+    assert @clear_game.flag(0, 0)
+    assert !@clear_game.play(0, 0)
+
+    # if flag is removed can play again
+    assert @clear_game.flag(0, 0)
+    assert @clear_game.play(0, 0)
+  end
+
+  def test_play_hit_cell_show_surrounding_mines
     game = nil
     mapped_mines = [[1, 0]]
     Minesweeper.stub(:shuffle_array, ->(_array) { mapped_mines }) do
@@ -62,6 +68,34 @@ class MinesweeperTest < Minitest::Test
     assert_equal 1, board_state[0][1].surrounding_mines
     assert_equal 0, board_state[1][0].surrounding_mines
     assert_equal 0, board_state[1][0].surrounding_mines
+  end
+
+  def test_play_hit_cell_discovers_more
+    game = nil
+    mapped_mines = [[0, 2]]
+    Minesweeper.stub(:shuffle_array, ->(_array) { mapped_mines }) do
+      game = Minesweeper.new(3, 3, 1)
+    end
+
+    assert game.play(0, 0)
+    assert game.still_playing?
+
+    board_state = game.board_state
+    assert board_state[0][0].discovered?
+    assert !board_state[0][1].discovered?
+    assert !board_state[0][2].discovered?
+    assert board_state[1][0].discovered?
+    assert !board_state[1][1].discovered?
+    assert !board_state[1][2].discovered?
+    assert board_state[2][0].discovered?
+    assert board_state[2][1].discovered?
+    assert board_state[2][2].discovered?
+
+    Array(0...3).each do |x|
+      Array(0...3).each do |y|
+        assert_equal 0, board_state[x][y].surrounding_mines
+      end
+    end
   end
 
   def test_flag
