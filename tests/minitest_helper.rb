@@ -1,8 +1,16 @@
+require 'simplecov'
 require 'codacy-coverage'
 
-Codacy::Reporter.start do
-  add_filter '_test'
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
+                                                                   SimpleCov::Formatter::HTMLFormatter,
+                                                                   Codacy::Formatter
+                                                               ])
+
+SimpleCov.start do
+  add_filter '/tests/'
 end
+
+Codacy::Reporter.start
 
 require 'minitest/autorun'
 require_relative '../game'
