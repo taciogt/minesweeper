@@ -6,6 +6,13 @@ class MinesweeperTest < Minitest::Test
   def setup
     @clear_game = Minesweeper.new(2, 3, 0)
     @all_mined_game = Minesweeper.new(2, 3, 6)
+
+    @mapped_game = nil
+    mapped_mines = [[0, 2], [1, 2]]
+    Minesweeper.stub(:shuffle_array, ->(array) { mapped_mines }) do
+      @mapped_game = Minesweeper.new(3, 4, 2)
+    end
+
   end
 
   def test_initial_state
@@ -33,6 +40,23 @@ class MinesweeperTest < Minitest::Test
     # play on cell with a flag is not valid
     assert @clear_game.flag(1, 0)
     assert !@clear_game.play(1, 0)
+  end
+
+  def test_play_hit_cell_discovers_more
+    game = nil
+    mapped_mines = [[1, 0]]
+    Minesweeper.stub(:shuffle_array, ->(array) { mapped_mines }) do
+      game = Minesweeper.new(2, 2, 1)
+    end
+
+    assert game.play(0, 1)
+    assert game.still_playing?
+
+    board_state = game.board_state
+    assert !board_state[0][0].discovered?
+    assert board_state[0][1].discovered?
+    assert !board_state[1][0].discovered?
+    assert !board_state[1][0].discovered?
   end
 
   def test_flag

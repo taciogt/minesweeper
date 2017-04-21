@@ -65,23 +65,22 @@ class Minesweeper
     @height = height
     @mines_number = mines_number
 
-
-    @lines = Array.new(@height) do |column|
-      Array.new(@width) do |line|
-        PrivateCell.new column, line
+    @cells = Array.new(@width) do |x|
+      Array.new(@height) do |y|
+        PrivateCell.new x, y
       end
     end
 
     mine_positions = []
-    Array.new(@height) do |column|
-      Array.new(@width) do |line|
-        mine_positions.push [column, line]
+    Array.new(@width) do |x|
+      Array.new(@height) do |y|
+        mine_positions.push [x, y]
       end
     end
 
     mine_positions = Minesweeper.shuffle_array mine_positions
     mine_positions.take(@mines_number).each do |pair|
-      @lines[pair[0]][pair[1]].set_mine
+      @cells[pair[0]][pair[1]].set_mine
     end
 
   end
@@ -95,18 +94,18 @@ class Minesweeper
   end
 
   def play(x, y)
-    @lines[y][x].hit
+    @cells[x][y].hit
   end
 
   def flag(x, y)
-    @lines[y][x].flag
+    @cells[x][y].flag
   end
 
   def still_playing?
     still_playing = true
 
-    @lines.each do |line|
-      line.each do |cell|
+    @cells.each do |column|
+      column.each do |cell|
         still_playing = false if cell.discovered? && cell.has_mine?
       end
     end
@@ -115,9 +114,9 @@ class Minesweeper
   end
 
   def board_state
-    Array.new(@height) do |column|
-      Array.new(@width) do |line|
-        @lines[column][line].public_cell
+    Array.new(@width) do |x|
+      Array.new(@height) do |y|
+        @cells[x][y].public_cell
       end
     end
   end
@@ -128,18 +127,22 @@ end
 class Printer
 
   def self.get_string(board_state)
-    lines = ''
-    board_state.each do |line|
-      line_string = ''
-      line.each do |cell|
-        cell.discovered? ? line_string += ' ' : line_string += '.'
+    width = board_state.size
+    height = board_state[0].size
 
+    board_string = ''
+
+    Array(0...height).each do |y|
+      line_string = ''
+      Array(0...width).each do |x|
+        cell = board_state[x][y]
+        cell.discovered? ? line_string += ' ' : line_string += '.'
       end
       line_string += "\r\n"
-      lines += line_string
+      board_string += line_string
     end
 
-    lines
+    board_string
   end
 
   def self.print(game)
