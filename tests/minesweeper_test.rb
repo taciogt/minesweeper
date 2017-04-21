@@ -1,5 +1,4 @@
-require_relative '../game'
-require 'minitest/autorun'
+require_relative 'minitest_helper'
 
 
 class MinesweeperTest < Minitest::Test
