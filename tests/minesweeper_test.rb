@@ -4,21 +4,7 @@ require 'minitest/autorun'
 
 class MinesweeperTest < Minitest::Test
 
-  # Called before every test method runs. Can be used
-  # to set up fixture information.
-  def setup
-    # Do nothing
-  end
-
-  # Called after every test method runs. Can be used to tear
-  # down fixture information.
-
-  def teardown
-    # Do nothing
-  end
-
-  # Fake test
-  def test_constructor
+  def test_initial_state
     game = Minesweeper.new(2, 4, 1)
 
     assert_equal("Minefield game: size=2x4, number of mines=1", game.to_s)
@@ -39,23 +25,17 @@ class MinesweeperTest < Minitest::Test
     assert game.still_playing?
 
     assert game.board_state[0][0].discovered?
-
   end
 
-  def test_step_over_mine
-    game = Minesweeper.new(1, 1, 1)
-
-    game.stub(:random_number, 42.42) do
-      assert_equal(42.42, game.random_number)
-    end
-
-  end
-
-  def test_stub_works
-    game = Minesweeper.new(2, 2, 0)
-
-    game.stub(:random_number, 42.42) do
-      assert_equal(42.42, game.random_number)
+  def test_set_mined_fields_using_shuffle_array
+    Minesweeper.stub(:shuffle_array, ->(array) { array.reverse }) do
+      [1...10].each do
+        game = Minesweeper.new(2, 2, 1)
+        assert(game.play(0, 0))
+        assert(game.play(0, 1))
+        assert(game.play(1, 0))
+        assert(!game.play(1, 1))
+      end
     end
 
   end

@@ -15,6 +15,7 @@ class PrivateCell
     @x = x
     @y = y
     @discovered = false
+    @has_mine = false
   end
 
   def public_cell
@@ -23,10 +24,15 @@ class PrivateCell
 
   def hit
     @discovered = true
+    !@has_mine
   end
 
   def to_s
     "Private cell (#{@x}, #{@y})"
+  end
+
+  def set_mine
+    @has_mine = true
   end
 end
 
@@ -38,8 +44,29 @@ class Minesweeper
     @height = height
     @mines_number = mines_number
 
-    @lines = Array.new(@height) { |column| Array.new(@width) { |line| PrivateCell.new(column, line) } }
 
+    @lines = Array.new(@height) do |column|
+      Array.new(@width) do |line|
+        PrivateCell.new column, line
+      end
+    end
+
+    mine_positions = []
+    Array.new(@height) do |column|
+      Array.new(@width) do |line|
+        mine_positions.push [column, line]
+      end
+    end
+
+    mine_positions = Minesweeper.shuffle_array mine_positions
+    mine_positions.take(@mines_number).each do |pair|
+      @lines[pair[0]][pair[1]].set_mine
+    end
+
+  end
+
+  def self.shuffle_array(array)
+    array.shuffle
   end
 
   def to_s
@@ -62,17 +89,12 @@ class Minesweeper
     end
   end
 
-  def random_number
-    rand(1...1000)
-  end
-
 end
 
 
 class Printer
 
-  def get_string(board_state)
-    puts board_state
+  def self.get_string(board_state)
     lines = ''
     board_state.each do |line|
       line_string = ''
@@ -86,4 +108,10 @@ class Printer
 
     lines
   end
+
+  def self.print(game)
+    board_state_as_string = get_string game.board_state
+    puts board_state_as_string
+  end
+
 end
