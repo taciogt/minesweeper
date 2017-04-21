@@ -17,13 +17,15 @@ class MinesweeperTest < Minitest::Test
 
   end
 
-  def test_play_on_undiscovered_and_unmined_cell
+  def test_play_on_safe_cell
     game = Minesweeper.new(2, 2, 0)
 
     assert game.play(0, 0)
     assert game.still_playing?
-
     assert game.board_state[0][0].discovered?
+
+    # play on cell already discovered is not valid
+    assert !game.play(0, 0)
   end
 
   def test_set_mined_fields_using_shuffle_array

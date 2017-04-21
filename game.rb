@@ -31,6 +31,10 @@ class PrivateCell
     "Private cell (#{@x}, #{@y})"
   end
 
+  def discovered?
+    @discovered
+  end
+
   def set_mine
     @has_mine = true
   end
@@ -74,7 +78,7 @@ class Minesweeper
   end
 
   def play(x, y)
-    @lines[y][x].hit
+    !@lines[y][x].discovered? && @lines[y][x].hit
   end
 
   def still_playing?
