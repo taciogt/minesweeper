@@ -1,6 +1,10 @@
 class PublicCell
+  def initialize(discovered)
+    @discovered = discovered
+  end
+
   def discovered?
-    false
+    @discovered
   end
 end
 
@@ -10,10 +14,15 @@ class PrivateCell
   def initialize(x, y)
     @x = x
     @y = y
+    @discovered = false
   end
 
   def public_cell
-    PublicCell.new
+    PublicCell.new(@discovered)
+  end
+
+  def hit
+    @discovered = true
   end
 
   def to_s
@@ -37,8 +46,8 @@ class Minesweeper
     "Minefield game: size=#{@width}x#{@height}, number of mines=#{@mines_number}"
   end
 
-  def play(x,y)
-    true
+  def play(x, y)
+    @lines[y][x].hit
   end
 
   def still_playing?
@@ -48,7 +57,6 @@ class Minesweeper
   def board_state
     Array.new(@height) do |column|
       Array.new(@width) do |line|
-        # puts @lines[column][line]
         @lines[column][line].public_cell
       end
     end
