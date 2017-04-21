@@ -45,7 +45,7 @@ class MinesweeperTest < Minitest::Test
   def test_play_hit_cell_discovers_more
     game = nil
     mapped_mines = [[1, 0]]
-    Minesweeper.stub(:shuffle_array, ->(array) { mapped_mines }) do
+    Minesweeper.stub(:shuffle_array, ->(_array) { mapped_mines }) do
       game = Minesweeper.new(2, 2, 1)
     end
 
