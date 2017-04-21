@@ -36,6 +36,7 @@ class PrivateCell
 
     @discovered = false
     @has_mine = false
+    @flag = false
   end
 
   def public_cell(surrounding_cells)
