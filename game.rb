@@ -23,8 +23,21 @@ class PrivateCell
   end
 
   def hit
-    @discovered = true
-    !@has_mine
+    if !@discovered && !@flag
+      @discovered = true
+      true
+    else
+      false
+    end
+  end
+
+  def flag
+    if !@discovered
+      @flag = !@flag
+      true
+    else
+      false
+    end
   end
 
   def to_s
@@ -33,6 +46,10 @@ class PrivateCell
 
   def discovered?
     @discovered
+  end
+
+  def has_mine?
+    @has_mine
   end
 
   def set_mine
@@ -78,11 +95,23 @@ class Minesweeper
   end
 
   def play(x, y)
-    !@lines[y][x].discovered? && @lines[y][x].hit
+    @lines[y][x].hit
+  end
+
+  def flag(x, y)
+    @lines[y][x].flag
   end
 
   def still_playing?
-    true
+    still_playing = true
+
+    @lines.each do |line|
+      line.each do |cell|
+        still_playing = false if cell.discovered? && cell.has_mine?
+      end
+    end
+
+    still_playing
   end
 
   def board_state
