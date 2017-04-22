@@ -8,7 +8,7 @@ class MinesweeperTest < Minitest::Test
     @all_mined_game = Minesweeper.new(2, 3, 6)
 
     @two_squared_game = nil
-    mapped_mines = [[0,0]]
+    mapped_mines = [[0, 0]]
     Minesweeper.stub(:shuffle_array, ->(_array) { mapped_mines }) do
       @two_squared_game = Minesweeper.new(2, 2, 1)
     end
@@ -64,6 +64,15 @@ class MinesweeperTest < Minitest::Test
     assert(!@mapped_game.board_state[0][0].discovered?)
   end
 
+  def test_flag
+    # can flag undiscovered cell
+    assert(@mapped_game.flag(0, 0))
+
+    # cannot flag discovered cell
+    @mapped_game.play(1, 0)
+    assert(!@mapped_game.flag(1, 0))
+  end
+
   def test_play_on_flag
     # play on cell with a flag is not valid
     assert @mapped_game.flag(0, 0)
@@ -74,13 +83,13 @@ class MinesweeperTest < Minitest::Test
     assert @mapped_game.play(0, 0)
   end
 
-  def test_flag
-    # can flag undiscovered cell
-    assert(@mapped_game.flag(0, 0))
+  def test_xray_board_state
+    assert_raises(Exception) do
+      @clear_game.board_state(xray: true)
+    end
 
-    # cannot flag discovered cell
-    @mapped_game.play(1, 0)
-    assert(!@mapped_game.flag(1, 0))
+    @clear_game.play(0, 0)
+    @clear_game.board_state(xray: true)
   end
 
   def test_still_playing_and_victory
@@ -194,8 +203,6 @@ class MinesweeperTest < Minitest::Test
         end
       end
     end
-
-
   end
 
 end

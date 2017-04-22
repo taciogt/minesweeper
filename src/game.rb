@@ -76,21 +76,12 @@ class Minesweeper
     safe_cells_discovered + @mines_number == @width * @height
   end
 
-  def board_state(options = {})
-    board_state = nil
-    # if options[:xray] and !still_playing?
-    #   Array.new(@width) do |x|
-    #     Array.new(@height) do |y|
-    #       @cells[x][y].public_cell(0, xray=options[:xray])
-    #     end
-    #   end
-    # else
-    #
-    # end
+  def board_state(xray: false)
+    raise Exception if xray && still_playing?
 
     Array.new(@width) do |x|
       Array.new(@height) do |y|
-        @cells[x][y].public_cell(surrounding_mines(@cells[x][y]), xray: options[:xray])
+        @cells[x][y].public_cell(surrounding_mines(@cells[x][y]), xray: xray)
       end
     end
   end

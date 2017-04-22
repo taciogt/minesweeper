@@ -51,9 +51,7 @@ class PrinterTest < Minitest::Test
 
     # print can xray finished game
     @mapped_game.play(0, 2)
-    puts @printer.print(xray: true)
     assert_equal("   \r\n   \r\n## \r\n   \r\n", @printer.print(xray: true))
-
   end
 
 
