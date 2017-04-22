@@ -73,11 +73,11 @@ class Minesweeper
   end
 
   private
+
   def valid_position?(x, y)
     x >= 0 && x < @width && y >= 0 && y < @height
   end
 
-  private
   def surrounding_cells(cell)
     cells = []
 
@@ -91,7 +91,6 @@ class Minesweeper
     cells
   end
 
-  private
   def surrounding_mines(cell)
     surrounding_mines = 0
 
