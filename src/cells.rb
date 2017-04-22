@@ -18,6 +18,7 @@ class PublicCell
     @position = private_cell.position
     @discovered = private_cell.discovered?
     @surrounding_mines = surrounding_mines
+    @has_mine = private_cell.discovered? && private_cell.has_mine?
   end
 
   def discovered?
@@ -26,6 +27,10 @@ class PublicCell
 
   def surrounding_mines
     @surrounding_mines
+  end
+
+  def has_mine?
+    @has_mine
   end
 
   def to_s

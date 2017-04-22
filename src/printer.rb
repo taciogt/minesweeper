@@ -11,11 +11,19 @@ class Printer
 
     board_string = ''
 
-    Array(0...height).each do |y|
+    height.times do |y|
       line_string = ''
-      Array(0...width).each do |x|
+      width.times do |x|
         cell = board_state[x][y]
-        cell.discovered? ? line_string += ' ' : line_string += '.'
+        if !cell.discovered?
+          line_string += '.'
+        elsif cell.has_mine?
+          line_string += '#'
+        elsif cell.surrounding_mines > 0
+          line_string += "#{cell.surrounding_mines}"
+        else
+          line_string += ' '
+        end
       end
       line_string += "\r\n"
       board_string += line_string

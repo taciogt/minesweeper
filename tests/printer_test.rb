@@ -9,6 +9,7 @@ class PrinterTest < Minitest::Test
     Minesweeper.stub(:shuffle_array, ->(_array) { mapped_mines }) do
       @mapped_game = Minesweeper.new(3, 4, 2)
     end
+
     @printer = Printer.new(@mapped_game)
   end
 
@@ -20,12 +21,19 @@ class PrinterTest < Minitest::Test
 
   def test_print_discovered_cell
     @mapped_game.play(0, 0)
-    assert_equal("   \r\n...\r\n...\r\n...\r\n", Printer.get_string(@mapped_game.board_state))
+    assert_equal("   \r\n...\r\n...\r\n...\r\n", @printer.to_s)
   end
 
-  def test_print_discovered_cell
-    @mapped_game.play(0, 0)
-    assert_equal("   \r\n...\r\n...\r\n...\r\n", @printer.to_s)
+  def test_cell_with_mines_near
+    @mapped_game.play(0, 1)
+    assert_equal("...\r\n2..\r\n...\r\n...\r\n", @printer.to_s)
+    @mapped_game.play(2, 1)
+    assert_equal("...\r\n2.1\r\n...\r\n...\r\n", @printer.to_s)
+  end
+
+  def test_print_cell_with_mine
+    @mapped_game.play(0, 2)
+    assert_equal("...\r\n...\r\n#..\r\n...\r\n", @printer.to_s)
   end
 
 
