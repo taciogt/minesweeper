@@ -1,6 +1,11 @@
 class Printer
 
-  def self.get_string(board_state)
+  def initialize(game)
+    @game = game
+  end
+
+  def to_s
+    board_state = @game.board_state
     width = board_state.size
     height = board_state[0].size
 
@@ -17,11 +22,6 @@ class Printer
     end
 
     board_string
-  end
-
-  def self.print(game)
-    board_state_as_string = get_string game.board_state
-    puts board_state_as_string
   end
 
 end
