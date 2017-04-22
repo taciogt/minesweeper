@@ -8,7 +8,7 @@ class Printer
     print
   end
 
-  def get_cell_symbol(cell, xray: false)
+  def get_cell_symbol(cell)
     if cell.flag?
       'F'
     elsif !cell.discovered?
