@@ -41,7 +41,7 @@ class Minesweeper
     if is_valid && surrounding_mines(@cells[x][y]).zero?
       surrounding_cells(@cells[x][y]).each do |cell|
         play(cell.position.x, cell.position.y) if
-            !cell.has_mine? && surrounding_mines(cell).zero?
+            !cell.mine? && surrounding_mines(cell).zero?
       end
     end
 
@@ -57,7 +57,7 @@ class Minesweeper
 
     @cells.each do |column|
       column.each do |cell|
-        has_lost = true if cell.discovered? && cell.has_mine?
+        has_lost = true if cell.discovered? && cell.mine?
       end
     end
 
@@ -69,17 +69,28 @@ class Minesweeper
 
     @cells.each do |column|
       column.each do |cell|
-        safe_cells_discovered += 1 if cell.discovered? && !cell.has_mine?
+        safe_cells_discovered += 1 if cell.discovered? && !cell.mine?
       end
     end
 
     safe_cells_discovered + @mines_number == @width * @height
   end
 
-  def board_state
+  def board_state(options = {})
+    board_state = nil
+    # if options[:xray] and !still_playing?
+    #   Array.new(@width) do |x|
+    #     Array.new(@height) do |y|
+    #       @cells[x][y].public_cell(0, xray=options[:xray])
+    #     end
+    #   end
+    # else
+    #
+    # end
+
     Array.new(@width) do |x|
       Array.new(@height) do |y|
-        @cells[x][y].public_cell(surrounding_mines(@cells[x][y]))
+        @cells[x][y].public_cell(surrounding_mines(@cells[x][y]), xray: options[:xray])
       end
     end
   end
@@ -107,7 +118,7 @@ class Minesweeper
     surrounding_mines = 0
 
     surrounding_cells(cell).each do |neighbour_cell|
-      surrounding_mines += 1 if neighbour_cell.has_mine?
+      surrounding_mines += 1 if neighbour_cell.mine?
     end
 
     surrounding_mines

@@ -13,7 +13,6 @@ class PrinterTest < Minitest::Test
     @printer = Printer.new(@mapped_game)
   end
 
-  # Fake test
   def test_print_single_minefield
     game = Minesweeper.new(2, 4, 1)
     assert_equal("..\r\n..\r\n..\r\n..\r\n", Printer.new(game).to_s)
@@ -39,6 +38,22 @@ class PrinterTest < Minitest::Test
   def test_print_cell_with_flag
     @mapped_game.flag(0, 0)
     assert_equal("F..\r\n...\r\n...\r\n...\r\n", @printer.to_s)
+  end
+
+  def test_print_xray
+    # print method works as to_s
+    assert_equal("...\r\n...\r\n...\r\n...\r\n", @printer.print)
+
+    # print method cannot xray unfinished game
+    assert_raises(Exception) do
+      @printer.print(xray: true)
+    end
+
+    # print can xray finished game
+    @mapped_game.play(0, 2)
+    puts @printer.print(xray: true)
+    assert_equal("   \r\n   \r\n## \r\n   \r\n", @printer.print(xray: true))
+
   end
 
 
