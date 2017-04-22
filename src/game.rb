@@ -38,14 +38,15 @@ class Minesweeper
   def play(x, y)
     is_valid = @cells[x][y].hit
 
-    surrounding_cells(@cells[x][y]).each do |cell|
-      if !cell.discovered? && !cell.has_mine? && surrounding_mines(cell).zero?
-        play(cell.position.x, cell.position.y)
+    if is_valid
+      surrounding_cells(@cells[x][y]).each do |cell|
+        if !cell.has_mine? && surrounding_mines(cell).zero?
+          play(cell.position.x, cell.position.y)
+        end
       end
     end
 
     is_valid
-
   end
 
   def flag(x, y)
