@@ -40,9 +40,8 @@ class Minesweeper
 
     if is_valid
       surrounding_cells(@cells[x][y]).each do |cell|
-        if !cell.has_mine? && surrounding_mines(cell).zero?
-          play(cell.position.x, cell.position.y)
-        end
+        play(cell.position.x, cell.position.y) if
+            !cell.has_mine? && surrounding_mines(cell).zero?
       end
     end
 

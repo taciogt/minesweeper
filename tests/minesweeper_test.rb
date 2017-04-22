@@ -58,7 +58,7 @@ class MinesweeperTest < Minitest::Test
     assert @clear_game.play(0, 0)
   end
 
-  def test_play_hit_cell_show_surrounding_mines
+  def test_play_show_surrounding_mines
     game = nil
     mapped_mines = [[1, 0]]
     Minesweeper.stub(:shuffle_array, ->(_array) { mapped_mines }) do
@@ -69,15 +69,15 @@ class MinesweeperTest < Minitest::Test
     assert game.still_playing?
 
     board_state = game.board_state
-    assert !board_state[0][0].discovered?
-    assert board_state[0][1].discovered?
-    assert !board_state[1][0].discovered?
-    assert !board_state[1][0].discovered?
+    assert(!board_state[0][0].discovered?)
+    assert(board_state[0][1].discovered?)
+    assert(!board_state[1][0].discovered?)
+    assert(!board_state[1][0].discovered?)
 
-    assert_equal 0, board_state[0][0].surrounding_mines
-    assert_equal 1, board_state[0][1].surrounding_mines
-    assert_equal 0, board_state[1][0].surrounding_mines
-    assert_equal 0, board_state[1][0].surrounding_mines
+    assert_equal(0, board_state[0][0].surrounding_mines)
+    assert_equal(1, board_state[0][1].surrounding_mines)
+    assert_equal(0, board_state[1][0].surrounding_mines)
+    assert_equal(0, board_state[1][0].surrounding_mines)
   end
 
   def test_play_hit_cell_discovers_more
@@ -91,15 +91,15 @@ class MinesweeperTest < Minitest::Test
     assert game.still_playing?
 
     board_state = game.board_state
-    assert board_state[0][0].discovered?
-    assert !board_state[0][1].discovered?
-    assert !board_state[0][2].discovered?
-    assert board_state[1][0].discovered?
-    assert !board_state[1][1].discovered?
-    assert !board_state[1][2].discovered?
-    assert board_state[2][0].discovered?
-    assert board_state[2][1].discovered?
-    assert board_state[2][2].discovered?
+    assert(board_state[0][0].discovered?)
+    assert(!board_state[0][1].discovered?)
+    assert(!board_state[0][2].discovered?)
+    assert(board_state[1][0].discovered?)
+    assert(!board_state[1][1].discovered?)
+    assert(!board_state[1][2].discovered?)
+    assert(board_state[2][0].discovered?)
+    assert(board_state[2][1].discovered?)
+    assert(board_state[2][2].discovered?)
 
     Array(0...3).each do |x|
       Array(0...3).each do |y|
@@ -119,12 +119,12 @@ class MinesweeperTest < Minitest::Test
 
   def test_still_playing
     # when game starts, always can play
-    assert @clear_game.still_playing?
-    assert @all_mined_game.still_playing?
+    assert(@clear_game.still_playing?)
+    assert(@all_mined_game.still_playing?)
 
     # stops playing when hit on mine
     @all_mined_game.play(0, 0)
-    assert !@all_mined_game.still_playing?
+    assert(!@all_mined_game.still_playing?)
   end
 
   def test_set_mines_using_shuffled_array
