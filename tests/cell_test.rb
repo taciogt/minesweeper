@@ -2,23 +2,9 @@ require_relative 'minitest_helper'
 
 class CellTest < Minitest::Test
 
-  # Called before every test method runs. Can be used
-  # to set up fixture information.
-  def setup
-    # Do nothing
-  end
-
-  # Called after every test method runs. Can be used to tear
-  # down fixture information.
-
-  def teardown
-    # Do nothing
-  end
-
-  # Fake test
   def test_constructor
-    assert(true)
+    cell = PublicCell.new(PrivateCell.new(0, 0), 0)
+    assert_equal('Public cell (0, 0)', cell.to_s)
   end
-
 
 end
