@@ -14,3 +14,4 @@ Codacy::Reporter.start
 
 require 'minitest/autorun'
 require_relative '../src/game'
+require_relative '../src/printer'
