@@ -14,9 +14,9 @@ class Position
 end
 
 class PublicCell
-  def initialize(position, discovered, surrounding_mines)
-    @position = position
-    @discovered = discovered
+  def initialize(private_cell, surrounding_mines)
+    @position = private_cell.position
+    @discovered = private_cell.discovered?
     @surrounding_mines = surrounding_mines
   end
 
@@ -47,7 +47,7 @@ class PrivateCell
 
   def public_cell(surrounding_mines)
     surrounding_mines = 0 unless @discovered
-    PublicCell.new(@position, @discovered, surrounding_mines)
+    PublicCell.new(self, surrounding_mines)
   end
 
   def position

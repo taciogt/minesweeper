@@ -21,12 +21,10 @@ class MinesweeperTest < Minitest::Test
   end
 
   def test_initial_state
-    game = Minesweeper.new(2, 4, 1)
+    assert_equal("Minefield game: size=3x4, number of mines=2", @mapped_game.to_s)
+    assert(@mapped_game.still_playing?)
 
-    assert_equal("Minefield game: size=2x4, number of mines=1", game.to_s)
-    assert(game.still_playing?)
-
-    game.board_state.each do |column|
+    @mapped_game.board_state.each do |column|
       column.each do |public_cell|
         assert(!public_cell.discovered?)
       end
@@ -45,7 +43,6 @@ class MinesweeperTest < Minitest::Test
     assert_raises NoMethodError do
       @clear_game.surrounding_cells(PrivateCell.new(0, 0))
     end
-
   end
 
   def test_play
@@ -55,6 +52,16 @@ class MinesweeperTest < Minitest::Test
 
     # play on cell already discovered is not valid
     assert !@mapped_game.play(0, 0)
+  end
+
+  def test_cant_play_if_mine_was_hit
+    assert(@mapped_game.play(0, 2))
+    assert(!@mapped_game.still_playing?)
+    assert(@mapped_game.board_state[0][2].discovered?)
+
+    assert(!@mapped_game.play(0, 0))
+    assert(!@mapped_game.still_playing?)
+    assert(!@mapped_game.board_state[0][0].discovered?)
   end
 
   def test_play_on_flag

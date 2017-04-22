@@ -36,7 +36,7 @@ class Minesweeper
   end
 
   def play(x, y)
-    is_valid = @cells[x][y].hit
+    is_valid = still_playing? && @cells[x][y].hit
 
     if is_valid && surrounding_mines(@cells[x][y]).zero?
       surrounding_cells(@cells[x][y]).each do |cell|
