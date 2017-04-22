@@ -12,7 +12,6 @@ class MinesweeperTest < Minitest::Test
     Minesweeper.stub(:shuffle_array, ->(array) { mapped_mines }) do
       @mapped_game = Minesweeper.new(3, 4, 2)
     end
-
   end
 
   def test_initial_state
@@ -26,7 +25,6 @@ class MinesweeperTest < Minitest::Test
         assert(!public_cell.discovered?)
       end
     end
-
   end
 
   def test_private_methods_are_private
@@ -56,6 +54,39 @@ class MinesweeperTest < Minitest::Test
     # if flag is removed can play again
     assert @clear_game.flag(0, 0)
     assert @clear_game.play(0, 0)
+  end
+
+  def test_flag
+    # can flag undiscovered cell
+    assert @clear_game.flag(0, 0)
+
+    # cannot flag discovered cell
+    @clear_game.play(1, 0)
+    assert !@clear_game.flag(1, 0)
+  end
+
+  def test_still_playing
+    # when game starts, always can play
+    assert(@clear_game.still_playing?)
+    assert(@all_mined_game.still_playing?)
+
+    # stops playing when hit on mine
+    @all_mined_game.play(0, 0)
+    assert(!@all_mined_game.still_playing?)
+  end
+
+  def test_set_mines_using_shuffled_array
+    Minesweeper.stub(:shuffle_array, ->(array) { array.reverse }) do
+      [1...10].each do
+        game = Minesweeper.new(2, 2, 1)
+        assert(game.play(0, 0))
+        assert(game.play(0, 1))
+        assert(game.play(1, 0))
+        assert(game.still_playing?)
+        assert(game.play(1, 1))
+        assert(!game.still_playing?)
+      end
+    end
   end
 
   def test_play_show_surrounding_mines
@@ -101,45 +132,35 @@ class MinesweeperTest < Minitest::Test
     assert(board_state[2][1].discovered?)
     assert(board_state[2][2].discovered?)
 
-    Array(0...3).each do |x|
-      Array(0...3).each do |y|
+    3.times do |x|
+      3.times do |y|
         assert_equal 0, board_state[x][y].surrounding_mines
       end
     end
   end
 
-  def test_flag
-    # can flag undiscovered cell
-    assert @clear_game.flag(0, 0)
-
-    # cannot flag discovered cell
-    @clear_game.play(1, 0)
-    assert !@clear_game.flag(1, 0)
-  end
-
-  def test_still_playing
-    # when game starts, always can play
-    assert(@clear_game.still_playing?)
-    assert(@all_mined_game.still_playing?)
-
-    # stops playing when hit on mine
-    @all_mined_game.play(0, 0)
-    assert(!@all_mined_game.still_playing?)
-  end
-
-  def test_set_mines_using_shuffled_array
-    Minesweeper.stub(:shuffle_array, ->(array) { array.reverse }) do
-      [1...10].each do
-        game = Minesweeper.new(2, 2, 1)
-        assert(game.play(0, 0))
-        assert(game.play(0, 1))
-        assert(game.play(1, 0))
-        assert(game.still_playing?)
-        assert(game.play(1, 1))
-        assert(!game.still_playing?)
-      end
+  def test_play_big_game
+    game = nil
+    mapped_mines = [[1, 1], [2, 1], [2, 2]]
+    Minesweeper.stub(:shuffle_array, ->(_array) { mapped_mines }) do
+      game = Minesweeper.new(4, 5, 3)
     end
 
+    assert(game.play(1, 2))
+    assert(game.still_playing?)
+
+    board_state = game.board_state
+    assert(board_state[1][2].discovered?)
+    assert_equal(3, board_state[1][2].surrounding_mines)
+
+    4.times do |x|
+      5.times do |y|
+        unless [x, y] == [1, 2]
+          assert(!board_state[x][y].discovered?, "Expected not discovered for cell: #{board_state[x][y]}")
+          assert_equal(0, board_state[x][y].surrounding_mines)
+        end
+      end
+    end
   end
 
 end

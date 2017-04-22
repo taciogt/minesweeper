@@ -7,7 +7,8 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
                                                                ])
 
 SimpleCov.start do
-  add_filter '/tests/'
+  add_filter '/not_tests/'
+
 end
 
 Codacy::Reporter.start

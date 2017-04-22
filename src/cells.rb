@@ -14,7 +14,8 @@ class Position
 end
 
 class PublicCell
-  def initialize(discovered, surrounding_mines)
+  def initialize(position, discovered, surrounding_mines)
+    @position = position
     @discovered = discovered
     @surrounding_mines = surrounding_mines
   end
@@ -26,6 +27,11 @@ class PublicCell
   def surrounding_mines
     @surrounding_mines
   end
+
+  def to_s
+    "Public cell (#{@position.x}, #{@position.y})"
+  end
+
 end
 
 
@@ -41,7 +47,7 @@ class PrivateCell
 
   def public_cell(surrounding_mines)
     surrounding_mines = 0 unless @discovered
-    PublicCell.new(@discovered, surrounding_mines)
+    PublicCell.new(@position, @discovered, surrounding_mines)
   end
 
   def position
