@@ -36,5 +36,10 @@ class PrinterTest < Minitest::Test
     assert_equal("...\r\n...\r\n#..\r\n...\r\n", @printer.to_s)
   end
 
+  def test_print_cell_with_flag
+    @mapped_game.flag(0, 0)
+    assert_equal("F..\r\n...\r\n...\r\n...\r\n", @printer.to_s)
+  end
+
 
 end

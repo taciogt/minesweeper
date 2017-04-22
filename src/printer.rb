@@ -15,7 +15,9 @@ class Printer
       line_string = ''
       width.times do |x|
         cell = board_state[x][y]
-        if !cell.discovered?
+        if cell.flag?
+          line_string += 'F'
+        elsif !cell.discovered?
           line_string += '.'
         elsif cell.has_mine?
           line_string += '#'

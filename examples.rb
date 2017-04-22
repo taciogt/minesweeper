@@ -3,15 +3,7 @@ require_relative 'src/game'
 require_relative 'src/printer'
 
 game = Minesweeper.new 4, 5, 3
-
-# Printer.print game
-# puts '----------'
-# game.play 0, 0
-# Printer.print game
-#
-# puts '----------'
-# game.play 1, 0
-# Printer.print game
+game_printer = Printer.new(game)
 
 positions = []
 2.times do |x|
@@ -20,8 +12,7 @@ positions = []
   end
 end
 positions.shuffle
-
-game_printer = Printer.new(game)
+puts "Plays sequence: #{positions}"
 
 while game.still_playing?
   next_play = positions.pop
@@ -33,4 +24,10 @@ while game.still_playing?
   puts game_printer
 
   puts '----------------'
+end
+
+if game.victory?
+  puts "O jogo foi vencido!"
+else
+  puts "Você perdeu!"
 end

@@ -19,6 +19,7 @@ class PublicCell
     @discovered = private_cell.discovered?
     @surrounding_mines = surrounding_mines
     @has_mine = private_cell.discovered? && private_cell.has_mine?
+    @flag = private_cell.flag?
   end
 
   def discovered?
@@ -31,6 +32,10 @@ class PublicCell
 
   def has_mine?
     @has_mine
+  end
+
+  def flag?
+    @flag
   end
 
   def to_s
@@ -87,6 +92,10 @@ class PrivateCell
 
   def has_mine?
     @has_mine
+  end
+
+  def flag?
+    @flag
   end
 
   def set_mine
