@@ -54,3 +54,5 @@ build-iPhoneSimulator/
 
 vendor/
 bin/
+
+Gemfile.lock
