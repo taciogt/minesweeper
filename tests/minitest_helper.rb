@@ -7,7 +7,7 @@ SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
                                                                ])
 
 SimpleCov.start do
-  add_filter '/not_tests/'
+  add_filter '/tests/'
 
 end
 

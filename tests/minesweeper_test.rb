@@ -9,7 +9,7 @@ class MinesweeperTest < Minitest::Test
 
     @mapped_game = nil
     mapped_mines = [[0, 2], [1, 2]]
-    Minesweeper.stub(:shuffle_array, ->(array) { mapped_mines }) do
+    Minesweeper.stub(:shuffle_array, ->(_array) { mapped_mines }) do
       @mapped_game = Minesweeper.new(3, 4, 2)
     end
   end
@@ -140,15 +140,18 @@ class MinesweeperTest < Minitest::Test
   end
 
   def test_play_big_game
+    # Prepare
     game = nil
     mapped_mines = [[1, 1], [2, 1], [2, 2]]
     Minesweeper.stub(:shuffle_array, ->(_array) { mapped_mines }) do
       game = Minesweeper.new(4, 5, 3)
     end
 
+    # Act: hit on a cell near 3 mines
     assert(game.play(1, 2))
     assert(game.still_playing?)
 
+    # Assert only the hit cell
     board_state = game.board_state
     assert(board_state[1][2].discovered?)
     assert_equal(3, board_state[1][2].surrounding_mines)
@@ -161,6 +164,8 @@ class MinesweeperTest < Minitest::Test
         end
       end
     end
+
+
   end
 
 end
