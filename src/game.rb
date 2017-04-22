@@ -53,15 +53,27 @@ class Minesweeper
   end
 
   def still_playing?
-    still_playing = true
+    has_lost = false
 
     @cells.each do |column|
       column.each do |cell|
-        still_playing = false if cell.discovered? && cell.has_mine?
+        has_lost = true if cell.discovered? && cell.has_mine?
       end
     end
 
-    still_playing
+    !has_lost && !victory?
+  end
+
+  def victory?
+    safe_cells_discovered = 0
+
+    @cells.each do |column|
+      column.each do |cell|
+        safe_cells_discovered += 1 if cell.discovered? && !cell.has_mine?
+      end
+    end
+
+    safe_cells_discovered + @mines_number == @width * @height
   end
 
   def board_state
