@@ -14,8 +14,8 @@ class Minesweeper
     end
 
     mine_positions = []
-    Array.new(@width) do |x|
-      Array.new(@height) do |y|
+    @width.times do |x|
+      @height.times do |y|
         mine_positions.push [x, y]
       end
     end
