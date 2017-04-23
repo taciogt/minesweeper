@@ -27,12 +27,20 @@ game = Minesweeper.new(width, heigth, mines_number)
  
 * Game interaction
 
-** Play
+    * Play
 
 Receives the x and y coordinates and clicks at the corresponding cell, then the cell becomes discovered. The method returns a boolean if it was a valid play. The play is valid if the cell isn't clicked and if it hasn't a flag. If the movement is valid and there is no mine in this cell and its neighbours, all its neighbours without bomb or flag become discovered and the same behaviour are applied to them.   
 
 ```ruby
 game.play(x, y)
+```
+
+    * Flag
+
+Puts a flag in a cell that wasn't clicked or remove the flag from it. Returns a boolean if the movement was valid.
+
+```ruby
+game.flag(x, y)
 ```
 
 ## Demonstration
