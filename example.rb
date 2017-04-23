@@ -2,20 +2,20 @@ require_relative 'src/cells'
 require_relative 'src/game'
 require_relative 'src/printer'
 
-game = Minesweeper.new 4, 5, 3
+game = Minesweeper.new(3, 4, 2)
 game_printer = Printer.new(game)
 
-positions = []
+random_plays = []
 2.times do |x|
   4.times do |y|
-    positions.push [x, y]
+    random_plays.push [x, y]
   end
 end
-positions.shuffle
-puts "Plays sequence: #{positions}"
+random_plays.shuffle
+puts "Plays sequence: #{random_plays}"
 
 while game.still_playing?
-  next_play = positions.pop
+  next_play = random_plays.pop
   x = next_play[0]
   y = next_play[1]
   puts "Playing on position: #{x}, #{y}"
@@ -27,7 +27,9 @@ while game.still_playing?
 end
 
 if game.victory?
-  puts "O jogo foi vencido!"
+  puts 'You won! \o/'
 else
-  puts "Você perdeu!"
+  puts 'You lost! =('
 end
+
+puts game_printer.print(xray: true)
