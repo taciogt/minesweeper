@@ -84,7 +84,7 @@ class MinesweeperTest < Minitest::Test
   end
 
   def test_xray_board_state
-    assert_raises(Exception) do
+    assert_raises(SecurityError) do
       @clear_game.board_state(xray: true)
     end
 

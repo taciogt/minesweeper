@@ -77,7 +77,7 @@ class Minesweeper
   end
 
   def board_state(xray: false)
-    raise Exception if xray && still_playing?
+    raise SecurityError if xray && still_playing?
 
     Array.new(@width) do |x|
       Array.new(@height) do |y|

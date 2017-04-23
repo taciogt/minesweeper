@@ -25,23 +25,49 @@ The game object is created using the Minesweeper class constructor:
 game = Minesweeper.new(width, heigth, mines_number)
 ```
  
-* Game interaction
-
-    * Play
-
-Receives the x and y coordinates and clicks at the corresponding cell, then the cell becomes discovered. The method returns a boolean if it was a valid play. The play is valid if the cell isn't clicked and if it hasn't a flag. If the movement is valid and there is no mine in this cell and its neighbours, all its neighbours without bomb or flag become discovered and the same behaviour are applied to them.   
+* Clicking on minefield cells
 
 ```ruby
 game.play(x, y)
 ```
 
-    * Flag
+Receives the x and y coordinates and clicks at the corresponding cell, then the cell becomes discovered. The method returns a boolean if it was a valid play. The play is valid if the cell isn't clicked and if it hasn't a flag. If the movement is valid and there is no mine in this cell and its neighbours, all its neighbours without bomb or flag become discovered and the same behaviour are applied to them.   
 
-Puts a flag in a cell that wasn't clicked or remove the flag from it. Returns a boolean if the movement was valid.
+* Flagging a cell
 
 ```ruby
 game.flag(x, y)
 ```
+
+Puts a flag in a cell that wasn't clicked or remove the flag from it. Returns a boolean if the movement was valid.
+
+* Check if game is finished
+
+```ruby
+game.still_playing?
+```
+
+Returns `true` if the game is not finished.
+Returns `false` if the player clicked on a mine or all cells without mines are discovered.
+
+* Check if player won
+
+```ruby
+game.victory?
+```
+
+Return true if all cells without mines were discovered.
+
+* Board State
+
+```ruby
+game.board_state(xray: false)
+```
+
+Returns a representation of the minefield in the form of a two-dimensional array of `PublicCell`. For each cell in the field (`PrivateCell`) is created a corresponding `PublicCell` that contains only the information already discovered by the player. The user don't have access to all minefield cells information.
+
+Passing the parameter `xray=true` when the game is finished returns a different board state. In this scenario, all cells become discovered, so the player can see all mines positions. Passing the parameter `xray=true` before the game is finished is not allowed and raises a `SecurityError`.
+ 
 
 ## Demonstration
  
